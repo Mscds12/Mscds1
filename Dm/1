@@ -1,0 +1,29 @@
+11.08 15:17
+1
+;
+-- A. Create database
+CREATE DATABASE farmer;
+
+-- B. Create table
+CREATE TABLE agriculture (
+    farm_id TEXT,
+    crop_type TEXT,
+    farm_area DOUBLE,
+    irrigation_type TEXT,
+    fertilizer_used DOUBLE,
+    pesticide_used DOUBLE,
+    season TEXT,
+    yield DOUBLE,
+    soil_type TEXT,
+    water_usage DOUBLE
+);
+
+-- C. Perform DDL operations
+ALTER TABLE agriculture ADD COLUMN profit INT;
+SELECT * FROM agriculture WHERE farm_id = 5;
+
+-- D. Handle constraints
+ALTER TABLE agro ADD COLUMN profit INT;
+ALTER TABLE agro DROP COLUMN profit;
+RENAME TABLE agriculture TO agro;
+
