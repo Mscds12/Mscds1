@@ -1,0 +1,82 @@
+11.08 15:17
+3
+
+
+1. *INNER JOIN*:
+   select a.farm_id, a.yield, f.investment
+   from agro a
+   inner join farm_sales f
+   on a.farm_id = f.farm_id;
+
+2. *LEFT JOIN*:
+   select a.farm_id, a.yield, f.investment
+   from agro a
+   left join farm_sales f
+   on a.farm_id = f.farm_id
+   limit 10;
+   
+3. *RIGHT JOIN* (partially shown):
+   select a.farm_id, a.yield, f.investment
+   from agro a
+   right join farm_sales f
+   
+
+Create Table Query:
+Create a market_date_info table
+market_date date not null,
+market_day varchar(45) default null,
+market_week varchar(45) default null,
+market_year varchar(45) default null,
+market_start_time varchar(45) default null,
+market_end_time varchar(45) default null,
+special_notes blob,
+market_season varchar(45) default null,
+market_min_temperature varchar(45) default null,
+market_max_temperature varchar(45) default null,
+market_rain_flag int(11) not null default null,
+market_snow_flag int(11) default null,
+primary key (market_date),
+unique key market_date_unique (market_date)
+
+Insert Queries:
+insert into market_date_info values 
+('2019-03-02', 'Saturday', '9', '2019', '8:00 AM', '2:00 PM', null, 'Spring', '34', '42', 0, 0),
+('2019-03-09', 'Saturday', '10', '2019', '9:00 AM', '2:00 PM', null, 'Spring', '28', '39', 0, 0);
+
+
+create table market_datetime as (
+    select 
+        market_start_time,
+        market_end_time,
+        str_to_date(market_date, 'market_start_time', '%Y-%m-%d %h:%i %p') as market_start_datetime,
+        str_to_date(market_date, 'market_end_time', '%Y-%m-%d %h:%i %p') as market_end_datetime
+    from market_date_info
+);
+
+select 
+    market_start_datetime,
+    date_add(market_start_datetime, interval -30 day) as mktstart_date_plus_neg_30,
+    date_sub(market_start_datetime, interval 30 days) as mktstart_date_minus_30_days
+from market_datetime
+where market_start_datetime = '2019-03-02 03:00:00';
+
+
+create table market_datetime as (
+    select 
+        market_start_time,
+        market_end_time,
+        str_to_date(concat(market_date, ' ', market_start_time), '%Y-%m-%d %h:%i %p') as market_start_datetime,
+        str_to_date(concat(market_date, ' ', market_end_time), '%Y-%m-%d %h:%i %p') as market_end_datetime
+    from market_date_info
+);
+
+select 
+    market_start_datetime,
+    date_add(market_start_datetime, interval -30 day) as mktstart_date_plus_neg_30,
+    date_sub(market_start_datetime, interval 30 day) as mktstart_date_minus_30_days
+from market_datetime
+where market_start_datetime = '2019-03-02 03:00:00';
+select market_start_datetime, market_end_datetime,
+timestampdiff(hour, market_start_datetime, market_end_datetime) as market_duration_hours,
+timestampdiff(minute, market_start_datetime, market_end_datetime) as market_duration_minutes
+from market_datetime limit 7;
