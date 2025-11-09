@@ -1,0 +1,55 @@
+11.08 15:18
+4
+
+1. `select f.form_id, f.crop_type, m.market_start_datetime, m.market_end_datetime from agro f join market_datetime m on f.field > 30 order by m.market_start_datetime limit 3;`
+2. `select f.crop_type, timestampdiff(hour, m.market_start_datetime, m.market_end_datetime) as market_hours from agro f join market_datetime m limit 5;`
+
+
+The two main queries are:
+1. *Average Yield by Crop Type and Year*:
+   select crop_type, year(market_start_datetime) as year,
+   avg(f_yield) as avg_yield
+   from agro
+   join market_datetime m on market.market_start_datetime between '2019-01-01' and '2019-12-31'
+   group by crop_type, year(m.market_start_datetime)
+   order by year, crop_type
+   limit 5;
+   
+
+2. *Total Markets by Year*:
+   select year(market_start_datetime) as year,
+   count(*) as total_markets
+   from market
+   group by year(market_start_datetime)
+   order by year;
+   
+
+
+create view total_yield_farm as
+select farm_id, fertilizer_used, soil_type,
+round(sum(yield * farm_area), 2) as total_land
+from agro
+group by farm_id, soil_type
+order by soil_type;
+
+
+For part B, creating and managing a CTE:
+with total_yield_farm as (
+select soil_type, round(avg(yield), 3) as average_yield
+from agro
+group by soil_type
+)
+select * from total_yield_farm;
+
+
+1. *First Query:*
+   select year (market_start_datetime) as year, count (*) as total_markets
+   from market_datetime
+   group by year (market_start_datetime)
+   order by year;
+   round (sum (water_usage * farm_area), 2) as total_water_usage
+   from agro
+   group by soil_type
+   order by total_water_usage;
+   select * from total_yield_farm;
+   
