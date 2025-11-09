@@ -1,0 +1,60 @@
+ 20:01
+10
+The text in the image is as follows:
+
+    1. Configure Replica set
+    2. Start Mongodb in the SERVICES
+    3. Create separate data directions for each replica set member in "C:\data\db1", "C:\data\db2", "C:\data\db3"
+    4. Edit the mongod.cfg file present in MongoDB Folder
+    5. Locate the replication section and add the replSetName parameter. choose a unique name for your replica set replication:
+    - replSetName: "myReplicaSet"
+    5. Open a separate command prompt for each replica set member
+    6. Start each mongod instance, specifying the replica set name, data path, port and bind-ip:
+    - mongod --port 2717 --dbpath "C:\data\db1" --replSet myReplicaSet --bind_ip localhost
+    - mongod --port 2717 --dbpath "C:\data\db2" --replSet myReplicaSet --bind_ip localhost
+    - mongod --port 2717 --dbpath "C:\data\db3" --replSet myReplicaSet --bind_ip localhost
+
+B) Enable Replication in mongoDB
+1. Open a new command prompt and connect to one of the mongod instances using mongosh port 2717
+
+-     2. Initialize the replica set with rs.initiate() command:
+    - rs.initiate()
+        
+-     3. Check the status of the replica set:
+    - rs.status()
+       
+1. Initialize the replica set with `rs.initiate()` command:
+   rs.initiate()
+   
+2. *Check the status of the replica set:*
+   rs.status()
+
+3. *Adding MongoDB instances in Replica sets:*
+   rs.add("localhost:27217")
+   
+Testing the Replication Process..
+
+1) view the exisung databases.
+
+show dbs
+
+admin 80.00 H18
+
+config 128.00 HIB Local 360.00 KLB
+
+2) Insert Data
+
+Use farmer...
+
+switched to db farmer
+
+db.farmer. insert("name "AB(4)
+
+
+3) Open Mongo DB compass and click New connection"
+
+4) Enter the connection sting for replica set "mongod //localhost 271, localhost: 2727, localhost 27372 replicaset = my Replicaset" in URL section.
+
+5) Click on "save and connect
+
+6) once connected, the farmer database is created win collection name in it as "farmer and I document inserted in it
