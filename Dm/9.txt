@@ -1,0 +1,15 @@
+11.08 15:51
+9
+
+
+Creating Indexes
+db.agriculture.createIndex({Farm_Area: 1})
+db.agriculture.createIndex({Crop_Type: 1}, {name: "farmer"})
+db.agriculture.createIndex({Crop_type: "text"})
+db.agriculture.createIndex({"$**": 1})
+
+Viewing Indexes
+db.agriculture.getIndexes()
+
+Dropping an Index
+db.agriculture.dropIndex("farmer")
