@@ -1,0 +1,126 @@
+11.08 15:49
+8
+// Switch to Farmer_DB database
+use Farmer_DB;
+
+// Create Documents
+db.student_info.insertOne({
+  name: "Alice",
+  age: 28,
+  email: "alice@example.com"
+});
+
+db.student_info.insertMany([
+  { name: "Bob", age: 32, email: "bob@example.com" },
+  { name: "Carol", age: 25, email: "carol@example.com" }
+]);
+
+// Read Documents
+db.student_info.find();
+db.student_info.find({ age: { $gt: 30 } });
+db.student_info.findOne({ name: "Alice" });
+The image shows examples of MongoDB aggregation queries. I'll provide you the MongoDB code for each of the examples shown:
+
+1. Group by Item and Calculate Total Quantity
+db.sales.aggregate([
+  {
+    $group: {
+      _id: "$item",
+      totalQuantity: { $sum: "$quantity" }
+    }
+  }
+])
+
+2. Group by Category and Calculate Aggregations
+db.sales.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalSales: { $sum: { $multiply: ["$price", "$quantity"] } },
+      avgPrice: { $avg: "$price" },
+      minPrice: { $min: "$price" },
+      maxPrice: { $max: "$price" }
+    }
+  }
+])
+
+3. Count Total Documents
+db.sales.aggregate([
+  {
+    $count: "totalDocuments"
+  }
+])
+
+4. Match and Group
+db.sales.aggregate([
+  { $match: { item: "apple" } },
+  {
+    $group: {
+      _id: "$item",
+      totalQuantity: { $sum: "$quantity" }
+    }
+  }
+])
+
+
+1. `$match` + `$group`
+db.sales.aggregate([
+  { $match: { item: "apple" } },
+  { $group: { _id: "$item", totalQuantity: { $sum: "$quantity" } } }
+])
+2. `$project`
+db.sales.aggregate([
+  { 
+    $project: { 
+      item: 1, 
+      totalSales: { $multiply: ["$price", "$quantity"] } 
+    } 
+  }
+])
+3. `$sort` + `$limit`
+db.sales.aggregate([
+  { 
+    $project: { 
+      item: 1, 
+      totalSales: { $multiply: ["$price", "$quantity"] } 
+    } 
+  },
+  { $sort: { totalSales: -1 } },
+  { $limit: 2 }
+])
+
+
+Query 1: Adding a `revenue` field
+db.sales.aggregate([
+  {
+    $addFields: {
+      revenue: { $multiply: ["$price", "$quantity"] }
+    }
+  }
+])
+
+Query 2: Using `$facet` for total revenue and item count
+Here's the MongoDB code based on the image:
+
+Query 1: Adding a `revenue` field
+db.sales.aggregate([
+  {
+    $addFields: {
+      revenue: { $multiply: ["$price", "$quantity"] }
+    }
+  }
+])
+
+Query 2: Using `$facet` for total revenue and item count
+db.sales.aggregate([
+  {
+    $facet: {
+      totalRevenue: [
+        { $group: { _id: null, total: { $sum: { $multiply: ["$price", "$quantity"] } } }
+      ],
+      itemCount: [
+        { $group: { _id: "$item", count: { $sum: 1 } }
+      ]
+    }
+  }
+])
