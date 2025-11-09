@@ -1,0 +1,56 @@
+11.08 15:18
+5
+
+Part A: Using set operations:
+1. Select crop_type, soil_type from agro where soil_type = 'Loamy'
+2. Select crop_type, soil_type from agro where yield > 90
+3. Select crop_type, soil_type from agro where soil_type = 'Peaty'
+SELECT crop_type, soil_type FROM agro WHERE soil_type = 'Loamy'
+UNION
+SELECT crop_type, soil_type FROM agro WHERE yield > 90
+UNION
+SELECT crop_type, soil_type FROM agro WHERE soil_type = 'Peaty';
+
+Part B: datetime functions
+1:
+SELECT market_start_datetime,
+CASE 
+    WHEN DAYOFWEEK(market_start_datetime) IN
+(1.7) if 'weekday' else 'weekend' end as day_type
+from market_datetime
+limit 5;
+
+select market_end_datetime,
+       date_add(market_end_datetime, interval 30 minute) as extended_end
+from market_datetime
+limit 5;
+
+2. *Second Query:*
+   select crop_type, total_yield
+   from (
+     select crop_type, sum(yield) as total_yield
+     from agro
+     group by crop_type
+   ) t
+   where total_yield > 100;
+   
+
+3. *Third Query:*
+   select farm_id, crop_type, yield
+   from (
+     select farm_id, crop_type, yield,
+     rank() over (partition by crop_type order by yield desc) as rank
+     from agro
+   ) ranked
+   where rank = 1
+   limit 8;
+   
+select farm_id, fertilizer_used, soil_type, yield
+from agro
+group by farm_id, fertilizer
+order by soil_type;
+
+select * from total_yield_farm as tyf left join total_yield_farm as yf
+on tyf.yield > yf.yield
+where tyf.yield >30
+limit 5;
