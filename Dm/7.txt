@@ -1,0 +1,30 @@
+11.08 15:41
+7
+
+
+A. Installation of MongoDB
+1. Download MongoDB Shell and MongoDB Atlas from www.mongodb.com/try/downloads
+2. Run the installer and follow the setup wizard
+3. Configure MongoDB as a service
+4. Optionally install MongoDB Compass
+
+B. Create database and collection in MongoDB
+1. Open MongoDB Compass and connect to your MongoDB instance
+2. Click on "Create Database" to create a new database
+3. Create a collection within the database
+
+C. Basic MongoDB shell handling commands
+- List databases: `show databases`
+- List collections: `show collections`
+- Count documents: `db.collection.countDocuments()`
+- Find document by ID: `db.collection.find({_id: ObjectId("...")})`
+
+
+1. `show dbs`
+2. `db.adminCommand( { listDatabases: 1 } )`
+3. `use Farmer_DB` followed by `show collections`
+4. `db.agriculture.countDocuments()`
+5. `db.agriculture.findOne({ "_id": ObjectId("68d6387645a02fc2a843a02f026fa2c843a314a2") })`
+
+
+
