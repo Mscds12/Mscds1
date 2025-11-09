@@ -1,0 +1,63 @@
+11.08 15:17
+2
+
+A. Using insert, update, delete operations on tables
+insert into agro values (farm_id, farm_area, crop, irrigation_type, pgr_nitrogen_used, pesticide_used, soil_type, water_usage, yield, season) values
+('F051', 'Rice', 400.05, 'Drip', '14:32', '5:21', 'Zaid', '42924.81'),
+('F051', 'Rice', 400.05, 'Drip', '14:32', '5:21', 'Clay', '742', '42924.81'),
+('F052', 'Kharif', 158.42, 'Rain fed', '4:5:21', '3:9:11', 'Sandy loam', '50.33', 'Rabi', '74536.30'),
+('F053', 'Cotton', '69.31', 'Manual', '10:45', '9:41', 'Sloamy', '37.15', 'Kharif', '31242.54');
+
+Other queries in notes:
+
+select * from agro order by farm_id desc limit;
+
+update agro
+set water_usage = water_usage +10 -10;
+
+select water_usage, yield
+from agro
+where yield >25
+order by yield
+limit 5;
+
+
+B. *Basic SQL statements*
+   select crop_type, farm_area from agro limit 3;
+   select farm_id as ID from agro limit 10;
+   
+
+2. *Restricting and sorting data*
+   select irrigation_type, yield, season from agro where farm_area > 10.0 limit 7;
+   
+
+1.
+select irrigation_type, yield, season from agro where farm_area > 100 limit 7;
+
+2.
+select farm_id, crop_type, yield, round((yield - avg(yield) over (partition by crop_type)),2) as yield_vs_avg from agro limit 10;
+
+3.
+delete from agro where farm_id = 'F0053';
+
+
+Basic Queries
+-- Select all columns from agro table
+SELECT * FROM agro;
+
+-- Select specific columns
+SELECT farm_id, crop_type, yield FROM agro;
+
+Filtering and Sorting
+-- Filter by farm area
+SELECT * FROM agro WHERE farm_area > 100;
+
+-- Sort by yield in descending order
+SELECT * FROM agro ORDER BY yield DESC;
+
+Aggregate Queries
+Average yield by crop type
+SELECT crop_type, AVG(yield) AS avg_yield FROM agro GROUP BY crop_type;
+Total yield per crop type
+SELECT crop_type, SUM(yield) AS total_yield FROM agro GROUP BY crop_type;
+
