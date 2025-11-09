@@ -1,0 +1,62 @@
+ 15:17
+6
+
+
+Problem 1: Using the Spotify user dataset, find out the users that are more engaged with using the app based on the following criteria:
+- a) listens more than the average listening time for their subscription type
+- b) plays more songs per day than the average for their device type
+- c) Have a skip rate lower than the average skip rate
+with listening_average as (
+    select 
+        subscription_type,
+        avg(listening_time) as average_listening_time
+    from spotify
+    group by subscription_type
+),
+average_songs_per_day as (
+    select 
+        device_type,
+        avg(songs_played_per_day) as average_songs_per_day
+    from spotify
+    group by device_type
+)
+select *
+from spotify a
+inner join listening_average b on a.subscription_type = b.subscription_type
+inner join average_songs_per_day c on a.device_type = c.device_type
+where a.listening_time > b.average_listening_time
+and a.songs_played_per_day > c.average_songs_per_day
+and a.skip_rate < (select avg(skip_rate) from spotify)
+
+select 
+    *,
+    case
+        when listening_time > (select avg(listening_time) from spotify group by subscription_type having subscription_type = spotify.subscription_type)
+        and songs_played_per_day > (select avg(songs_played_per_day) from spotify group by device_type having device_type = spotify.device_type)
+        and skip_rate < (select avg(skip_rate) from spotify)
+        then 'Highly Engaged'
+        else 'Not Highly Engaged'
+    end as engagement_level
+from spotify;
+
+Problem 2: Using the ecommmerce dataset find out the loyal customers based on the following criterion:
+- a) more than 4 orders
+- b) active for more than 1.5 years
+with activity as (
+    select 
+        cid,
+        datediff(month, signup_date, max(order_date)) as duration_active,
+        count(order_id) as order_count
+    from ecomm
+    group by cid, signup_date
+    having order_count>=4 and duration_active > 1.5 * 12
+),
+loyalty_defined as (
+    select *,
+    case 
+        when cid in (select distinct cid from activity) then 1
+        else 0
+    end as loyal
+    from ecomm
+)
+select * from loyalty_defined;
